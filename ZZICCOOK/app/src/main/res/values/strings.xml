@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ZZICCOOK</string>
+
+    <string name="no_recipe">You have not added any recipe yet</string>
+    <string name="no_bowl">You have not added any bowl yet</string>
+
+    <string name="no_favorite_recipe">No favorite recipe is added yet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="measuring_unit">
+        <item>ml</item>
+        <item>L</item>
+        <item>g</item>
+        <item>kg</item>
+    </string-array>
+
+    <string-array name="bowl_type">
+        <item>cylinder</item>
+        <item>cup</item>
+    </string-array>
+</resources>

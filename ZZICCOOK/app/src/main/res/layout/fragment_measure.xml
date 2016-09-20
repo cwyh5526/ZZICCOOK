@@ -1,0 +1,269 @@
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sliding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity ="bottom"
+    sothree:umanoPanelHeight="68dp"
+    sothree:umanoShadowHeight="4dp"
+    sothree:umanoDragView="@+id/dragView"
+    sothree:umanoOverlay="true"
+    sothree:umanoScrollableView="@+id/recipe_detail"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <FrameLayout
+            android:id="@+id/camera_fragment"
+            android:layout_centerInParent="true"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"/>
+
+
+        <FrameLayout
+            android:id="@+id/select_bowl_fragment"
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:padding="10dp"
+            android:background="@android:color/white"
+
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:focusableInTouchMode="true"
+            android:scrollbarStyle="insideInset"
+           />
+
+
+
+        <EditText
+            android:id="@+id/edit_measuring_value"
+            android:text="0"
+            android:textSize="16dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="@dimen/sliding_panel_margin"
+            />
+        <Spinner
+            android:id="@+id/spinner_measuring_unit"
+            android:spinnerMode="dropdown"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/sliding_panel_margin"
+            />
+        <Button
+            android:id="@+id/btn_start_measure"
+            android:text="START"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/sliding_panel_margin"
+            />
+    </RelativeLayout>
+    <!--Sliding Layout-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="false"
+
+        android:id="@+id/dragView">
+
+        <Button
+            android:id="@+id/btn_sliding"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_gravity="center_vertical|center"
+            android:background="@drawable/icon_slide_up"
+
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sliding_panel_margin"
+            android:orientation="horizontal"
+            >
+
+
+            <Button
+                android:id="@+id/btn_previous_order_atMeasure2"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:background="@drawable/arrow_left"
+                android:gravity="center_vertical|left"
+
+                />
+            <TextView
+                android:id="@+id/recipe_preview_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_centerInParent="true"
+                android:textColor="#ffffff"
+                android:text="Sample_recipe"
+                />
+            <Button
+                android:id="@+id/btn_next_order_atMeasure2"
+                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:background="@drawable/arrow_right"
+                android:gravity="center_vertical|right"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+        <ScrollView
+            android:id="@+id/sv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <LinearLayout
+                android:id="@+id/linearLayout_atMeasure2"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:weightSum="1"
+                >
+                <!--폰에서 그림 가져오는 공간 -->
+
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical" android:layout_width="fill_parent"
+                    android:layout_height="142dp" android:weightSum="1"
+                    android:layout_weight="0.51"
+                    android:layout_marginBottom="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/imageView1_atMeasure2"
+                        android:layout_width="358dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <!--제목 label-->
+                    <TextView
+                        android:id="@+id/tv_Title_atMeasure2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="TITLE"
+                        android:textSize="30dp"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"
+                        />
+
+                </LinearLayout>
+                <!--재료 입력 공간 -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <!--재료  label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="ingredient:"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"
+                        />
+                    <TextView
+                        android:id="@+id/tv_Ingredient_atMeasure2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                </LinearLayout>
+
+                <!--순서 입력공간 -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <!--순서 label -->
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="order:"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"
+                        />
+                    <LinearLayout
+                        android:id="@+id/recipe_order_layout_atMeasure2"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!--총량 입력공간 -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <!--총량 label -->
+                    <!--총량 label text -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="amount:"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"/>
+
+                    <TextView
+                        android:id="@+id/tv_Amount_atMeasure2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:text="0"
+                        android:textColor="#ffffff" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+

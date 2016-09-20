@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:weightSum="1"
+            >
+            <!--폰에서 그림 가져오는 공간 -->
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="fill_parent"
+                android:layout_height="142dp" android:weightSum="1"
+                android:layout_weight="0.51"
+                android:background="#FFFFFF"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#ffffff">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="#FF7870"
+                    android:text="FOOD IMAGE "
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="358dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                >
+                <Button
+                    android:id="@+id/btn_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="☆"
+                    android:textSize="30dp"
+                    android:textColor="#F7534A"
+                    android:background="#00ffffff"
+                  />
+                <!--제목 label-->
+                <TextView
+                    android:id="@+id/tv_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="TITLE"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    />
+
+            </LinearLayout>
+            <!--재료 입력 공간 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--재료  label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="ingredient:"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/tv_Ingredient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    />
+
+            </LinearLayout>
+
+            <!--순서 입력공간 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--순서 label -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="order:"
+                    android:textStyle="bold"
+                    />
+                <LinearLayout
+                    android:id="@+id/recipe_order_layout_At_Detail"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--총량 입력공간 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--총량 label -->
+                <!--총량 label text -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="amount:"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_Amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="0" />
+
+            </LinearLayout>
+
+            <!--버튼 공간 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                >
+                <!--Start Measure2 Button-->
+                <Button
+                    android:id="@+id/btn_start_measure2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start Measure"
+                    android:background="#FEEEED"
+                    android:textColor="#F7534A"
+                    android:textStyle="bold"
+                    android:layout_marginRight="40dp"
+                     />
+                <!--취소 버튼 -->
+                <Button
+                    android:id="@+id/btn_Cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:background="#FEEEED"
+                    android:textColor="#F7534A"
+                    android:textStyle="bold"
+                    android:layout_toRightOf="@id/btn_start_measure2"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
