@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#F94950</color>
+
+    <color name="gray">#818181</color>
+    <color name="Tab">#649C97</color>
+    <color name="TabUpside">#49736F</color>
+
+    <color name="lightyellow">#F5B31B</color>
+    <color name="ButtonYellow">#FFEBAB</color>
+    <color name="Title">#F5B31B</color>
+    <color name="StarOrange">#FFB63E</color>
+
+
+    <color name="ripple">#F06292</color>
+    <color name="accent">#E91E00</color>
+    <color name="accent_pressed">#C2185B</color>
+    <color name="colorPeach">#FF8781</color>
+</resources>
+

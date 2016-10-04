@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.example.user.zziccook"
+        minSdkVersion 17
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+android {
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
+}
+
+
+task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
+    def ndkDir = project.plugins.findPlugin('com.android.application').sdkHandler.getNdkFolder()
+    commandLine "$ndkDir\\ndk-build.cmd ",
+            'NDK_PROJECT_PATH=build\\intermediates\\ndk',
+            'NDK_LIBS_OUT=src\\main\\jniLibs',
+            'APP_BUILD_SCRIPT=src\\main\\jni\\Android.mk',
+            'NDK_APPLICATION_MK=src\\main\\jni\\Application.mk'
+}
+
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn ndkBuild
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    repositories {
+        mavenCentral()
+    }
+    compile project(':openCVLibrary2410')
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:support-v13:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.sothree.slidinguppanel:library:3.3.0'
+}

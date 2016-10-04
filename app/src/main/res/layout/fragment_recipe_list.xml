@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/lightyellow"
+        android:text="RECIPES "
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        >
+        <!--Add 버튼 -->
+        <Button
+            android:id="@+id/btn_AddRecipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Recipe+"
+            android:background="@color/ButtonYellow"
+            android:textColor="@color/Tab"
+            android:textStyle="bold"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/recipe_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/recipe_list_empty"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="32dp"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:textSize="50sp"
+        android:textColor="@android:color/darker_gray"
+        android:text="@string/no_recipe"
+         />
+
+
+</LinearLayout>

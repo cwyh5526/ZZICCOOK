@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Fragment.Bowl.BowlAddFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="1"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/lightyellow"
+            android:text="NEW BOWL "
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        <!--이름 입력공간 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <!--이름 label-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Name:"
+                android:textStyle="bold"
+                android:id="@+id/title"
+                />
+            <!--이름 입력창-->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/edit_text_Name"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="70dp"
+                android:layout_weight="0.08" />
+
+        </LinearLayout>
+
+        <!--그릇 종류 선택 공간 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <!--그릇  label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Bowl Type:"
+                android:textStyle="bold"
+                android:id="@+id/ingredient"
+                />
+            <Spinner
+                android:id="@+id/spinner_bowl_type"
+                android:spinnerMode="dropdown"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                />
+        </LinearLayout>
+
+        <!--OPEN CV로 CANNY 된 이미지 가져오는 곳 -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:weightSum="1"
+            android:layout_weight="0.51"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#EEEEEE">
+
+
+            <Button
+                android:id="@+id/btn_Measure_Bowl"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Add New Bowl +"
+                android:background="@color/ButtonYellow"
+                android:textColor="@color/Tab"
+                android:textStyle="bold"
+                android:typeface="sans"
+                />
+
+            <ImageView
+                android:id="@+id/imageView_Canny_Bowl"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <!--좌표값 공간 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+            <!--좌표값 label -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edge:"
+                android:textStyle="bold"
+                android:id="@+id/order"
+                />
+            <TextView
+                android:id="@+id/tv_Bowl_Edge_Measured"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:text="will be measured automatically "
+                />
+
+
+        </LinearLayout>
+
+        <!--높이 공간 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            >
+            <!--높이 label -->
+            <!--높이 label text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Height:"
+                android:textStyle="bold"
+                />
+
+
+            <EditText
+                android:id="@+id/tv_Bowl_Height_Measured"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="bowl을 추가하면 자동으로 측정됩니다."
+                />
+        </LinearLayout>
+        <!--너비 공간 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            >
+            <!--너비 label -->
+            <!--너비 label text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Width:"
+                android:textStyle="bold"
+                />
+            <EditText
+                android:id="@+id/tv_Bowl_Width_Measured"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="bowl을 추가하면 자동으로 측정됩니다."
+                />
+        </LinearLayout>
+        <!--부피 입력공간 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <!--부피 label -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAX Volume:"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/tv_Bowl_Volume_Measured"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="bowl을 추가하면 자동으로 측정됩니다."
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+    <!--버튼 공간 -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        >
+        <!--업로드 버튼-->
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+            android:background="@color/ButtonYellow"
+            android:textColor="@color/Tab"
+            android:textStyle="bold"
+            android:layout_marginRight="40dp"
+            />
+        <!--취소 버튼 -->
+        <Button
+            android:id="@+id/btn_AddBowl_Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:background="@color/ButtonYellow"
+            android:textColor="@color/Tab"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/btn_save"/>
+    </LinearLayout>
+</RelativeLayout>

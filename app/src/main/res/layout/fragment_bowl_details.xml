@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:weightSum="1"
+            >
+            <!--폰에서 그림 가져오는 공간 -->
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:weightSum="1"
+                android:layout_weight="0.51"
+                android:background="#FFFFFF"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#ffffff">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/Title"
+                    android:text="BOWL IMAGE "
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <ImageView
+                    android:id="@+id/bowl_imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
+            <!--이름 label-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                >
+                <!--이름 label-->
+                <TextView
+                    android:id="@+id/tv_Bowl_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="NAME"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    />
+
+
+            </LinearLayout>
+            <!--그릇 종류 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--그릇 종류  label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Type:"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/tv_Bowl_Type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    />
+
+            </LinearLayout>
+            <!--좌표값 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--좌표값  label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Edge:"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/tv_Bowl_Edge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    />
+
+            </LinearLayout>
+
+            <!--높이 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--높이 label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Height:"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/tv_Bowl_Height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:text="0"
+                    />
+
+            </LinearLayout>
+
+            <!--너비 입력공간 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--너비 label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Width:"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_Bowl_Width"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="0" />
+
+            </LinearLayout>
+
+            <!--부피 입력공간 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--부피 label -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MAX Volume:"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_Bowl_Volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="0" />
+
+            </LinearLayout>
+            <!--버튼 공간 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                >
+                <!--취소 버튼 -->
+                <Button
+                    android:id="@+id/btn_Bowl_Cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:background="@color/ButtonYellow"
+                    android:textColor="@color/Tab"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

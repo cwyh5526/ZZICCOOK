@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/lightyellow"
+        android:text="BOWLS "
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        >
+        <!--Add 버튼 -->
+        <Button
+            android:id="@+id/btn_AddBowl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Bowl+"
+            android:background="@color/ButtonYellow"
+            android:textColor="@color/Tab"
+            android:textStyle="bold"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/bowl_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+
+        />
+
+        <TextView
+            android:id="@+id/bowl_list_empty"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:padding="32dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textSize="50sp"
+            android:textColor="@android:color/darker_gray"
+            android:text="@string/no_bowl"
+             />
+
+            <!--<android.support.design.widget.FloatingActionButton-->
+                <!--android:id="@+id/fabtn_addBowl"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="bottom|right"-->
+                <!--android:layout_margin="16dp"-->
+                <!--android:src="@drawable/ic_add_white_24dp"-->
+
+                <!--fab:elevation="4dp"-->
+                <!--fab:fab_colorNormal="@color/accent"-->
+                <!--fab:fab_colorPressed="@color/accent_pressed"-->
+                <!--fab:fab_colorRipple="@color/ripple"/>-->
+
+</LinearLayout>
