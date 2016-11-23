@@ -218,37 +218,37 @@
 
         </LinearLayout>
         <!--버튼 공간 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true">
+            <!--업로드 버튼-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SAVE"
+                android:background="@color/ButtonYellow"
+                android:textColor="@color/Tab"
+                android:textStyle="bold"
 
+                android:layout_marginRight="40dp"
+                android:id="@+id/btn_save" />
+            <!--취소 버튼 -->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SHOW LIST"
+                android:background="@color/ButtonYellow"
+                android:textColor="@color/Tab"
+                android:textStyle="bold"
+                android:id="@+id/btn_listview"
+                android:layout_toRightOf="@+id/btn_save"/>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true">
-        <!--업로드 버튼-->
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SAVE"
-            android:background="@color/ButtonYellow"
-            android:textColor="@color/Tab"
-            android:textStyle="bold"
 
-            android:layout_marginRight="40dp"
-            android:id="@+id/btn_save" />
-        <!--취소 버튼 -->
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SHOW LIST"
-            android:background="@color/ButtonYellow"
-            android:textColor="@color/Tab"
-            android:textStyle="bold"
-            android:id="@+id/btn_listview"
-            android:layout_toRightOf="@+id/btn_save"/>
-    </LinearLayout>
 </RelativeLayout>

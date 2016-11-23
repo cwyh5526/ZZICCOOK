@@ -25,6 +25,11 @@ public class Bowl {
     private Point mEdgeRightTop;  // 그릇 우측 상단 모서리 좌표값
     private Point mEdgeRightDown;  // 그릇 우측 하단 모서리 좌표값
 
+
+    private int mRowsLength;
+
+    private int mColsLength;
+
     private double mHeight; //측정한 그릇 높이
     private double mWidth;  //측정한 그릇 너비
     private double mVolume; //측정한 그릇 부피
@@ -67,44 +72,59 @@ public class Bowl {
     }
 
 
-     public Point getEdgeLeftX() {
+    public int getColsLength() {
+        return mColsLength;
+    }
+
+    public void setColsLength(int mColsLength) {
+        this.mColsLength = mColsLength;
+    }
+    public int getRowsLength() {
+        return mRowsLength;
+    }
+
+    public void setRowsLength(int mRowsLength) {
+        this.mRowsLength = mRowsLength;
+    }
+
+     public Point getEdgeLeftTop() {
         return mEdgeLeftTop;
     }
 
-    public void setEdgeLeftX(Point edgeLeftX) {
+    public void setEdgeLeftTop(Point edgeLeftX) {
         this.mEdgeLeftTop = edgeLeftX;
     }
-    public void setEdgeLeftX(String edgeLeftX) {
+    public void setEdgeLeftTop(String edgeLeftX) {
         mEdgeLeftTop = stringToPoint(edgeLeftX);
     }
-    public Point getEdgeLeftY() {
+    public Point getEdgeLeftDown() {
         return mEdgeLeftDown;
     }
-    public void setEdgeLeftY(Point edgeLeftY) {
+    public void setEdgeLeftDown(Point edgeLeftY) {
         this.mEdgeLeftDown = edgeLeftY;
     }
-    public void setEdgeLeftY(String edgeLeftY) {
+    public void setEdgeLeftDown(String edgeLeftY) {
         this.mEdgeLeftDown = stringToPoint(edgeLeftY);
     }
 
-    public Point getEdgeRightX() {
+    public Point getEdgeRightTop() {
         return mEdgeRightTop;
     }
-    public void setEdgeRightX(Point edgeRightX) {
+    public void setEdgeRightTop(Point edgeRightX) {
         this.mEdgeRightTop = edgeRightX;
     }
-    public void setEdgeRightX(String edgeRightX) {
+    public void setEdgeRightTop(String edgeRightX) {
         this.mEdgeRightTop = stringToPoint(edgeRightX);
     }
 
 
-    public Point getEdgeRightY() {
+    public Point getEdgeRightDown() {
         return mEdgeRightDown;
     }
-    public void setEdgeRightY(Point edgeRightY) {
+    public void setEdgeRightDown(Point edgeRightY) {
         this.mEdgeRightDown = edgeRightY;
     }
-    public void setEdgeRightY(String edgeRightY) {
+    public void setEdgeRightDown(String edgeRightY) {
         this.mEdgeRightDown = stringToPoint(edgeRightY);
     }
 

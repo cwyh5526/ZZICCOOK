@@ -275,14 +275,14 @@ JNIEXPORT jintArray JNICALL Java_com_example_user_zziccook_VolumeMeasureActivity
     Mat& mRgb = *(Mat*)addrSrc;
     Mat& mGray = *(Mat*)addrCorner;
 
-    jintArray result  = (env)->NewIntArray(8);
+    jintArray result  = (env)->NewIntArray(10);
     int* sobelResult = testForContourBySobel(mRgb, mGray);
 
-    jint *cintArray = new jint[8];
-    for (int i=0;i<8;i++){
+    jint *cintArray = new jint[10];
+    for (int i=0;i<10;i++){
      cintArray[i]= (jint)sobelResult[i];
     }
-    env->SetIntArrayRegion(result,0,8,cintArray);
+    env->SetIntArrayRegion(result,0,10,cintArray);
 
     delete [] cintArray;
 
@@ -384,7 +384,7 @@ int testForContourByCanny(int argc, char** argv)
 int* testForContourBySobel(Mat img, Mat& gray)
 {
   LOGI("1");
-    int* edge= new int[8];
+    int* edge= new int[10];/////
 
 	char szBuf[512];
 	float fScale = 1.0f;
@@ -470,25 +470,28 @@ int* testForContourBySobel(Mat img, Mat& gray)
 			sobelHisto_ho.FindBottomY(cvmRGB);
 
 
-			circle(cvmRGB,Point(sobelHisto_ver.cols_top_left_x,sobelHisto_ho.rows_max_Y_up),10, Scalar(255),3);
+			circle(cvmBinary,Point(sobelHisto_ver.cols_top_left_x,sobelHisto_ho.rows_max_Y_up),10, Scalar(255),3);
 			LOGI("X_UP: %d, Y_UP :%d",sobelHisto_ver.cols_top_left_x,sobelHisto_ho.rows_max_Y_up);
 			edge[0]=sobelHisto_ver.cols_top_left_x;
 			edge[1]=sobelHisto_ho.rows_max_Y_up;
 
-			circle(cvmRGB,Point(sobelHisto_ver.cols_max_X_up,sobelHisto_ho.rows_bottom_Y),10, Scalar(255),3);
+			circle(cvmBinary,Point(sobelHisto_ver.cols_max_X_up,sobelHisto_ho.rows_bottom_Y),10, Scalar(255),3);
             LOGI("X_UP: %d, Bottom_Y :%d",sobelHisto_ver.cols_max_X_up,sobelHisto_ho.rows_bottom_Y);
             edge[2]=sobelHisto_ver.cols_max_X_up;
             edge[3]=sobelHisto_ho.rows_bottom_Y;
 
-			circle(cvmRGB,Point(sobelHisto_ver.cols_top_right_x,sobelHisto_ho.rows_max_Y_up),10, Scalar(255),3);
+			circle(cvmBinary,Point(sobelHisto_ver.cols_top_right_x,sobelHisto_ho.rows_max_Y_up),10, Scalar(255),3);
 			LOGI("X_down: %d, Y_UP :%d",sobelHisto_ver.cols_top_right_x,sobelHisto_ho.rows_max_Y_up);
 			edge[4]=sobelHisto_ver.cols_top_right_x;
 			edge[5]=sobelHisto_ho.rows_max_Y_up;
 
-			circle(cvmRGB,Point(sobelHisto_ver.cols_max_X_down,sobelHisto_ho.rows_bottom_Y),10, Scalar(255),3);
+			circle(cvmBinary,Point(sobelHisto_ver.cols_max_X_down,sobelHisto_ho.rows_bottom_Y),10, Scalar(255),3);
 			LOGI("X_down: %d, Bottom_UP :%d",sobelHisto_ver.cols_max_X_down,sobelHisto_ho.rows_bottom_Y);
 			edge[6]=sobelHisto_ver.cols_max_X_down;
 			edge[7]=sobelHisto_ho.rows_bottom_Y;
+			edge[8]=cvmBinary.rows;
+			edge[9]=cvmBinary.cols;
+			LOGI("cvmBinary.rows: %d, cvmBinary.cols :%d",cvmBinary.rows,cvmBinary.cols);
 /*
 			printf("(xUp,yUp)=(%d,%d)\n",sobelHisto_ver.cols_max_X_up,sobelHisto_ho.rows_max_Y_up);
 			printf("(xUp,yDown)=(%d,%d)\n",sobelHisto_ver.cols_max_X_up,sobelHisto_ho.rows_bottom_Y);
@@ -546,33 +549,3 @@ void DrawEdgeOnRGB(Mat& cvmEdge, Mat cvmRGB)
 
 
 
-   /*Mat tmp = img.clone();
-    cvtColor(img, tmp, CV_RGBA2GRAY);
-    // Canny(gray,gray,100,300,3);
-    Mat dst, dst_norm, dst_norm_scaled;
-    dst = Mat::zeros(img.size(), CV_32FC1);
-
-
-    // Detecting corners
-    cornerHarris(tmp, dst, 2, 3, 0.04, BORDER_DEFAULT);
-
-    // Normalizing
-    normalize( dst, dst_norm, 0, 255, NORM_MINMAX, CV_32FC1, Mat() );
-    convertScaleAbs( dst_norm, dst_norm_scaled );
-
-    //   Drawing a circle around corners
-    for( int j = 0; j < dst_norm.rows ; j++ )
-    { for( int i = 0; i < dst_norm.cols; i++ )
-        {
-            if( (int) dst_norm.at<float>(j,i) > 200 )
-            {
-                circle(gray, Point( i, j ), 1, Scalar(0,0,255),1,8,0);
-                LOGI("JNI log : i = %d, j = %d",i,j);
-
-                //http://cinema4dr12.tistory.com/entry/OpenCV-Harrison-Corner-Detector
-            }
-
-        }
-    }
- /*
-*/

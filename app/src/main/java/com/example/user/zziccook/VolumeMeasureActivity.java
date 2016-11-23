@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ import android.widget.Toast;
 
 import com.example.user.zziccook.Fragment.Camera.CameraPreviewFragment;
 import com.example.user.zziccook.Helpers.Constants;
-import com.example.user.zziccook.OpenCV.MeasureEdgeBySobel;
+
 import com.example.user.zziccook.OpenCV.MeasureHeight;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -38,6 +39,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -83,7 +85,7 @@ public class VolumeMeasureActivity extends AppCompatActivity {
 
 
     //Sobel
-    private MeasureEdgeBySobel mMeasureEdgeBySobel;
+
 
     private Uri mImageUri;
 
@@ -91,6 +93,9 @@ public class VolumeMeasureActivity extends AppCompatActivity {
 
     Bitmap mThumbnail;
     private Point[] mEdge;
+    int mRowLength;
+    int mColsLength;
+
     static {
         try {
             System.loadLibrary("opencv_java3");
@@ -221,12 +226,12 @@ public class VolumeMeasureActivity extends AppCompatActivity {
                 if(mCheckDistance)
                 {
                     mDistance = mMeasureHeight.getDistance();
-                    mDistanceTextView.setText(mDistance + "cm");
+                    mDistanceTextView.setText(Math.round(mDistance*10.0)/10.0 + "cm");
                 }
                 if(mCheckHeight)
                 {
                     mHeight = mMeasureHeight.getHeight();
-                    mHeightTextView.setText(mHeight + "cm");
+                    mHeightTextView.setText(Math.round(mHeight*10.0)/10.0 + "cm");
                 }
                 //현재 각도
                 mCurrentAngle=mMeasureHeight.getAngle();
@@ -243,7 +248,7 @@ public class VolumeMeasureActivity extends AppCompatActivity {
 
     private void initializeEdgeMeasureSystem(){
         mEdge = new Point[4];
-        mMeasureEdgeBySobel = new MeasureEdgeBySobel();
+
         mSobelImage = (ImageView) findViewById(R.id.sobel_image);
 
     }
@@ -287,8 +292,19 @@ public class VolumeMeasureActivity extends AppCompatActivity {
                     try {
                         FileOutputStream fos = new FileOutputStream(pictureFile);
 
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        Bitmap origin = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         ExifInterface exif=new ExifInterface(pictureFile.toString());
+
+                        int height = origin.getHeight();
+                        int width = origin.getWidth();
+                        // Toast.makeText(this, width + " , " + height, Toast.LENGTH_SHORT).show();
+                        Bitmap bitmap = null;
+                        while (height > 720) {
+                            bitmap = Bitmap.createScaledBitmap(origin, (width * 720) / height, 720, true);
+                            height = bitmap.getHeight();
+                            width = bitmap.getWidth();
+                        }
+
                         Log.d("EXIF value", exif.getAttribute(ExifInterface.TAG_ORIENTATION));
 
                         if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
@@ -320,6 +336,10 @@ public class VolumeMeasureActivity extends AppCompatActivity {
                         mEdge[2]=new Point(edge[4],edge[5]);
                         mEdge[3]=new Point(edge[6],edge[7]);
 
+                        mRowLength = edge[8];
+                       mColsLength = edge[9];
+                        Log.d(TAG,"ROWS= "+String.valueOf(mRowLength)+"  COLS="+String.valueOf(mColsLength));
+
                         Log.d(TAG,"cvmRGB"+String.valueOf(edge[0])+","+String.valueOf(edge[1])+","+String.valueOf(edge[2])+","+String.valueOf(edge[3])
                                 +","+String.valueOf(edge[4])+","+String.valueOf(edge[5])+","+String.valueOf(edge[6])+", "+String.valueOf(edge[7]));
                         Log.d(TAG,"cvmRGB"+cvmRGB.toString());
@@ -336,12 +356,14 @@ public class VolumeMeasureActivity extends AppCompatActivity {
                         sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, mImageUri));
 
                         Toast.makeText(getApplicationContext(), "찍은 사진이 저장되었습니다.", Toast.LENGTH_SHORT).show();
-
-                        calculateWidth();
+                        Log.d(TAG,"imageSaveUri::"+imageSaveUri);
+                        Log.d(TAG,"mImageUri::"+mImageUri);
+//                        calculateWidth();
                         sendMeasuredData();
 
-                    }
-                    catch (Exception e){
+                    } catch (EOFException e){
+                        Log.e("사진저장","EOFException",e);
+                    } catch (Exception e){
                         Log.e("사진저장","저장실패!",e);
                     }
                 }
@@ -365,18 +387,18 @@ public class VolumeMeasureActivity extends AppCompatActivity {
         Log.d(TAG,"Captured Sobel Angle"+String.valueOf(mSobelAngle));
     }
 
-    private void calculateWidth(){
-        Log.d(TAG,"Calculate Real Width"+String.valueOf(mSobelAngle));
-        //화면상의 그릇 너비 및 높이
-        double widthOnScreen,heightOnScreen,heightNormalized;
-
-        heightOnScreen= mEdge[1].y-mEdge[0].y;
-//        widthOnScreen= ((mEdge[2].x-mEdge[0].x)+(mEdge[3].x-mEdge[1].x))/2; //위아래 평균
-        widthOnScreen =(mEdge[3].x-mEdge[1].x);//아래 너비 값
-        heightNormalized = heightOnScreen/Math.sin(Math.toRadians(mSobelAngle));
-
-        mWidth=(mHeight*widthOnScreen)/heightNormalized;
-    }
+//    private void calculateWidth(){
+//        Log.d(TAG,"Calculate Real Width"+String.valueOf(mSobelAngle));
+//        //화면상의 그릇 너비 및 높이
+//        double widthOnScreen,heightOnScreen,heightNormalized;
+//
+//        heightOnScreen= mEdge[1].y-mEdge[0].y;
+////        widthOnScreen= ((mEdge[2].x-mEdge[0].x)+(mEdge[3].x-mEdge[1].x))/2; //위아래 평균
+//        widthOnScreen =(mEdge[3].x-mEdge[1].x);//아래 너비 값
+//        heightNormalized = heightOnScreen/Math.sin(Math.toRadians(mSobelAngle));
+//
+//        mWidth=Math.round((mHeight*widthOnScreen)/heightNormalized*10.0)/10.0;
+//    }
 
     private void sendMeasuredData( ){
         Intent intent = getIntent();
@@ -389,7 +411,11 @@ public class VolumeMeasureActivity extends AppCompatActivity {
         intent.putExtra(Constants.ARG_BOWL_IMAGE_URI,mImageUri);
         Log.d(TAG,"sendMeasuredData:: mImageUri="+String.valueOf(mImageUri));
 
+        //가로세로 크기
+        intent.putExtra(Constants.ARG_BOWL_ROWS_LEN,mRowLength);
+        intent.putExtra(Constants.ARG_BOWL_COLS_LEN,mColsLength);
         //모서리 좌표
+
         intent.putExtra(Constants.ARG_BOWL_EDGE_LEFT_TOP,mEdge[0].toString());
         intent.putExtra(Constants.ARG_BOWL_EDGE_LEFT_DOWN,mEdge[1].toString());
         intent.putExtra(Constants.ARG_BOWL_EDGE_RIGHT_TOP,mEdge[2].toString());
@@ -399,9 +425,16 @@ public class VolumeMeasureActivity extends AppCompatActivity {
         Log.d(TAG,"sendMeasuredData:: mEdge_RIGHT_TOP="+mEdge[2].toString());
         Log.d(TAG,"sendMeasuredData:: mEdge_RIGHT_DOWN="+mEdge[3].toString());
 
-        //그릇 실제 너비
-        intent.putExtra(Constants.ARG_BOWL_WIDTH,mWidth);
-        Log.d(TAG,"sendMeasuredData:: mWidth="+String.valueOf(mWidth));
+        // Sobel 각도
+        if(mSobelAngle!=0.0){
+            intent.putExtra(Constants.ARG_BOWL_SOBEL_ANGLE,mSobelAngle);
+        }else{
+            intent.putExtra(Constants.ARG_BOWL_SOBEL_ANGLE,0.0);
+        }
+        Log.d(TAG,"sendMeasuredData:: Sobel Angle"+String.valueOf(mSobelAngle));
+//        //그릇 실제 너비
+//        intent.putExtra(Constants.ARG_BOWL_WIDTH,mWidth);
+//        Log.d(TAG,"sendMeasuredData:: mWidth="+String.valueOf(mWidth));
 
         //그릇 부피 여기서 계산? AddBowl에서 계산?
 

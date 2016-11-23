@@ -3,10 +3,14 @@ package com.example.user.zziccook.Fragment.Recipe;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +36,8 @@ import com.example.user.zziccook.Model.Recipe;
 import com.example.user.zziccook.R;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +55,7 @@ public class RecipeAddFragment extends Fragment {
     //Image properties
     private String mCurrentImagePath = null;
     private Uri mCapturedImageURI = null;
-  //  private ImageButton mProfileImageButton;//??? 사진가져오는앤가
+
 
     private EditText mTitleEditText,
             mIngredientEditText,
@@ -64,7 +70,7 @@ public class RecipeAddFragment extends Fragment {
 
 
     private ImageView mImageView;
-//    private Button mFavoriteBtn;
+
     private int mStar=0;
 
     OnRecipeSavedListener mCallback;
@@ -88,9 +94,6 @@ public class RecipeAddFragment extends Fragment {
         super.onCreate(savedInstanceState);
         db = new DatabaseHelper(getActivity());
         mRecipeOrderNum=1;
-//        setHasOptionsMenu(true);
-//        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Ensure there is a saved instance state.
         if (savedInstanceState != null) {
@@ -130,24 +133,7 @@ public class RecipeAddFragment extends Fragment {
         mRecipe = new Recipe();
     }
 
-//    private void PopulateFields() {
-////        TabLayoutActivity myActivity = (TabLayoutActivity) getActivity();
-//        mTitleEditText.setText(mRecipe.getTitle());
-//        mIngredientEditText.setText(mRecipe.getIngredient());
-//        mRecipeOrderEditText.setText(mRecipe.getRecipeOrder());
-//        mAmountEditText.setText(mRecipe.getAmount());
-//
-//
-//
-//        // Update profile's Image
-//        if (mCurrentImagePath != null && !mCurrentImagePath.isEmpty()) {
-//            mImageView.setImageDrawable(new BitmapDrawable(getResources(),
-//                    FileUtils.getResizedBitmap(mCurrentImagePath, 512, 512)));
-//        } else {
-//            mImageView.setImageDrawable(mRecipe.getImage(getActivity()));
-//        }
-//
-//    }
+
 
     private void InitializeViews() {
         mTitleEditText = (EditText) mRootView.findViewById(R.id.edit_text_Title);
@@ -199,13 +185,7 @@ public class RecipeAddFragment extends Fragment {
             }
         });
 
-//        mProfileImageButton = (ImageButton)mRootView.findViewById(R.id.customer_image_button);
-//        mProfileImageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                chooseImage();
-//            }
-//        });
+
     }
 
     @Override
@@ -218,29 +198,9 @@ public class RecipeAddFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
-//        ((TabLayoutActivity) activity).onSectionAttached(
-//                getArguments().getInt(Constants.ARG_SECTION_NUMBER));
+
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.customer_details_menu, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()){
-//            case android.R.id.home:
-//                getActivity().onBackPressed();
-//                break;
-//            case R.id.action_save_customer:
-//                SaveRecipe();
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     private void addRecipeOrder(){
         mRecipeOrderNum++;
@@ -311,8 +271,8 @@ public class RecipeAddFragment extends Fragment {
     private void chooseImage(){
 
 //        mCallback.onAddImage();
-
-        //We need the title to to save the image file
+//
+//        //We need the title to to save the image file
         if (mTitleEditText.getText() != null && !mTitleEditText.getText().toString().isEmpty()) {
             // Determine Uri of camera image to save.
             final File rootDir = new File(Constants.PICTURE_DIRECTORY);
@@ -369,29 +329,40 @@ public class RecipeAddFragment extends Fragment {
                     }
                 }
             }
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+            intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, Constants.SELECT_IMAGE);
 
-            // Create an intent to get pictures from the filesystem.
-            final Intent galleryIntent = new Intent();
-            galleryIntent.setType("image/*");
-            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-            galleryIntent.putExtra("crop", "true");
-            galleryIntent.putExtra("aspectX", 0);
-            galleryIntent.putExtra("aspectY", 0);
-            galleryIntent.putExtra("outputX", 200);
-            galleryIntent.putExtra("outputY", 150);
-
-            galleryIntent.putExtra("return-data", true);
+//            // Create an intent to get pictures from the filesystem.
+//            final Intent galleryIntent = new Intent();
+//            galleryIntent.setType("image/*");
+//            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+//            galleryIntent.putExtra("crop", "true");
+//            galleryIntent.putExtra("aspectX", 0);
+//            galleryIntent.putExtra("aspectY", 0);
+//            galleryIntent.putExtra("outputX", 200);
+//            galleryIntent.putExtra("outputY", 150);
+//            galleryIntent.putExtra("uri",mCapturedImageURI);
+//            try{
+//                 galleryIntent.putExtra("return-data", true);
+//                startActivityForResult(Intent.createChooser(galleryIntent,"Select Source"),Constants.SELECT_IMAGE);
+//            }
+//            catch(ActivityNotFoundException e){
+//
+//            }
             // Chooser of filesystem options.
-            final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
+            //final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
 
             // Add the camera options.
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
-                    cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+           // chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+           //         cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
 
             // Start activity to choose or take a picture.
-            startActivityForResult(chooserIntent, Constants.ACTION_REQUEST_IMAGE);
-        }
-        else {
+            //startActivityForResult(chooserIntent, Constants.SELECT_IMAGE);
+
+
+        }else {
             mTitleEditText.setError("Please enter Recipe Title");
         }
     }
@@ -401,42 +372,64 @@ public class RecipeAddFragment extends Fragment {
         super.onDetach();
 
     }
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+
+        CursorLoader cursorLoader = new CursorLoader(getContext(), contentUri, proj, null, null, null);
+        Cursor cursor = cursorLoader.loadInBackground();
+
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK){
-               // Get the resultant image's URI.
-                final Uri selectedImageUri = (data == null) ? mCapturedImageURI : data.getData();
-
-                // Ensure the image exists.
-                if (selectedImageUri != null) {
-
-                    // Add image to gallery if this is an image captured with the camera
-                    //Otherwise no need to re-add to the gallery if the image already exists
-                    if (requestCode == Constants.ACTION_REQUEST_IMAGE) {
-                        final Intent mediaScanIntent =
-                                new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        mediaScanIntent.setData(selectedImageUri);
-                        getActivity().sendBroadcast(mediaScanIntent);
-                    }
-
-                   mCurrentImagePath = FileUtils.getPath(getActivity(), selectedImageUri);
-
-                    // Update client's picture
-                    if (mCurrentImagePath != null && !mCurrentImagePath.isEmpty()) {
-
-                          mImageView.setImageDrawable(new BitmapDrawable(getResources(),
-                           FileUtils.getResizedBitmap(mCurrentImagePath, 512, 512)));
-                    }
-                }
-        }
-//        if (requestCode == Constants.SELECT_IMAGE) {
-//            Bundle extras = data.getExtras();
-//            if (extras != null) {
-//                Bitmap photo = extras.getParcelable("data");
+        if(requestCode==Constants.SELECT_IMAGE)
+        {
+            try {
+                Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+               mImageView.setImageBitmap(image_bitmap);
+            }catch (FileNotFoundException e){ e.printStackTrace();}
+            catch (IOException e)                 {		e.printStackTrace(); 			}
+            catch (Exception e)		         {             e.printStackTrace();			}
+//            Bundle extras2 = data.getExtras();
+//            if (extras2 != null) {
+//                Bitmap photo = extras2.getParcelable("data");
 //                mImageView.setImageBitmap(photo);
 //            }
-//        }
+            mCurrentImagePath=FileUtils.getPath(getActivity(),data.getData());
+            Log.d(TAG,"ONACTIVITYRESULT:: URI"+data.getData());
+        }
+        if (resultCode == Activity.RESULT_OK){
+
+            }else {
+            // Get the resultant image's URI.
+            final Uri selectedImageUri = (data == null) ? mCapturedImageURI : data.getData();
+            Log.d(TAG, "onActivityResult:: selectedImageUri:: " + selectedImageUri);
+            // Ensure the image exists.
+            if (selectedImageUri != null) {
+                Log.d(TAG, "onActivityResult::selectedImageUri " + selectedImageUri);
+                // Add image to gallery if this is an image captured with the camera
+                //Otherwise no need to re-add to the gallery if the image already exists
+                if (requestCode == Constants.ACTION_REQUEST_IMAGE) {
+                    final Intent mediaScanIntent =
+                            new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    mediaScanIntent.setData(selectedImageUri);
+                    getActivity().sendBroadcast(mediaScanIntent);
+                }
+
+                mCurrentImagePath = FileUtils.getPath(getActivity(), selectedImageUri);
+
+                // Update client's picture
+                if (mCurrentImagePath != null && !mCurrentImagePath.isEmpty()) {
+
+                    mImageView.setImageDrawable(new BitmapDrawable(getResources(),
+                            FileUtils.getResizedBitmap(mCurrentImagePath, 512, 512)));
+                }
+                Log.d(TAG, "onActivityResult:: mCurrentImagePath:: " + mCurrentImagePath);
+            }
+        }
 
     }
     /**

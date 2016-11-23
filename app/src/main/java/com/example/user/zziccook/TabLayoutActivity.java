@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +21,6 @@ import com.example.user.zziccook.Adapter.RecipeAdapter;
 import com.example.user.zziccook.Adapter.TabPagerAdapter;
 import com.example.user.zziccook.Fragment.Bowl.BowlAddFragment;
 
-import com.example.user.zziccook.Fragment.Camera.OpenCVCameraFragment;
 import com.example.user.zziccook.Fragment.Recipe.RecipeAddFragment;
 
 import com.example.user.zziccook.Fragment.Bowl.BowlDetailsFragment;
@@ -33,6 +33,8 @@ import com.example.user.zziccook.Fragment.Tab1Fragment;
 import com.example.user.zziccook.Helpers.Constants;
 import com.example.user.zziccook.Helpers.Enums;
 import com.example.user.zziccook.Model.Bowl;
+
+import org.opencv.core.Point;
 
 public class TabLayoutActivity extends AppCompatActivity implements
         Tab1Fragment.OnFragmentInteractionListener,
@@ -149,7 +151,7 @@ public class TabLayoutActivity extends AppCompatActivity implements
             case RecipeListFragment:
                 RecipeListFragment recipeListFrag =  RecipeListFragment.newInstance(Constants.RECIPLE_LIST,sectionNumber);
                 fragmentManager.beginTransaction().replace(R.id.tab2_fragment, recipeListFrag)
-                        .commit();
+                        .commitAllowingStateLoss();
                 break;
             case RecipeAddFragment:
                 RecipeAddFragment addRecipeFrag =  RecipeAddFragment.newInstance(sectionNumber);//id::bowl id
@@ -195,14 +197,7 @@ public class TabLayoutActivity extends AppCompatActivity implements
                 fragmentManager.beginTransaction().replace(R.id.select_bowl_fragment, bowlSelectFrag)
                         .addToBackStack(null).commit();
                 break;
-            case BowlMeasureFragment:
-                OpenCVCameraFragment camFrag=new OpenCVCameraFragment();
-                fragmentManager.beginTransaction().replace(R.id.tab3_fragment,camFrag)
-                        .addToBackStack(null).commit();
-//                BowlMeasureFragment bowlMeasureFragment = BowlMeasureFragment.newInstance();
-//                fragmentManager.beginTransaction().replace(R.id.tab3_fragment,bowlMeasureFragment)
-//                        .addToBackStack(null).commit();
-                break;
+
             case SettingFragment:
                 SettingFragment settingFrag = SettingFragment.newInstance();
                 fragmentManager.beginTransaction().replace(R.id.tab5_fragment,settingFrag)
@@ -224,11 +219,13 @@ public class TabLayoutActivity extends AppCompatActivity implements
 
         BowlAddFragment bowlAddFragment = (BowlAddFragment)getSupportFragmentManager().findFragmentById(R.id.tab3_fragment);
 
-        bowlAddFragment.SetMeasuredValues(data.getExtras(),data.getData(),data.getDoubleExtra(Constants.ARG_BOWL_HEIGHT,0), data.getDoubleExtra(Constants.ARG_BOWL_WIDTH,0),
+        bowlAddFragment.SetMeasuredValues((Uri)data.getParcelableExtra(Constants.ARG_BOWL_IMAGE_URI),data.getDoubleExtra(Constants.ARG_BOWL_HEIGHT,0), data.getDoubleExtra(Constants.ARG_BOWL_SOBEL_ANGLE,0),
                 data.getStringExtra(Constants.ARG_BOWL_EDGE_LEFT_TOP),
                 data.getStringExtra(Constants.ARG_BOWL_EDGE_LEFT_DOWN),
                 data.getStringExtra(Constants.ARG_BOWL_EDGE_RIGHT_TOP),
-                data.getStringExtra(Constants.ARG_BOWL_EDGE_RIGHT_DOWN));
+                data.getStringExtra(Constants.ARG_BOWL_EDGE_RIGHT_DOWN),
+                data.getIntExtra(Constants.ARG_BOWL_ROWS_LEN,0),
+                data.getIntExtra(Constants.ARG_BOWL_COLS_LEN,0));
         }
 
     }

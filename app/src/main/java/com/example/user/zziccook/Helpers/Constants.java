@@ -20,7 +20,13 @@ public class Constants {
 
     public static final String ARG_BOWL_HEIGHT="bowl_height";
     public static final String ARG_BOWL_WIDTH="bowl_width";
+    public static final String ARG_BOWL_SOBEL_ANGLE="bowl_sobel_angle";
     public static final String ARG_BOWL_IMAGE_URI="bowl_image_uri";
+    public static final String ARG_BOWL_EDGE = "bowl_edge";
+
+    public static final String ARG_BOWL_ROWS_LEN = "bowl_rows_length";
+    public static final String ARG_BOWL_COLS_LEN = "bowl_cols_length";
+
     public static final String ARG_BOWL_EDGE_LEFT_TOP = "left_top";
     public static final String ARG_BOWL_EDGE_LEFT_DOWN = "left_down";
     public static final String ARG_BOWL_EDGE_RIGHT_TOP = "right_top";
@@ -39,6 +45,9 @@ public class Constants {
     public static final String COLUMN_BOWL_ID = "_id";
     public static final String COLUMN_BOWL_NAME = "name";
     public static final String COLUMN_BOWL_TYPE = "type";
+
+    public static final String COLUMN_BOWL_ROWS = "rowLength";
+    public static final String COLUMN_BOWL_COLS = "colsLength";
 
     public static final String COLUMN_BOWL_EDGE_LEFT_X = "leftX";
     public static final String COLUMN_BOWL_EDGE_LEFT_Y = "leftY";

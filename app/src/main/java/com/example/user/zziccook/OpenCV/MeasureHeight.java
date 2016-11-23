@@ -28,7 +28,11 @@ public class MeasureHeight {
         this.mY = y / norm;
         this.mZ = z / norm;
     }
-
+    public double getAngle(){
+        double inclination = Math.toDegrees(Math.acos(mZ));
+        double angle;
+        return angle = Math.round((inclination) * 10.0) / 10.0;    // 지면과 스마트폰 사이의 각도
+    }
     public double getDistance()
     {
         double inclination = Math.toDegrees(Math.acos(mZ));
@@ -37,7 +41,7 @@ public class MeasureHeight {
         mDistanceAngle = angle;
 
         double cosAngle =Math.cos(Math.toRadians(angle));
-        mDistance=Math.round(mPhoneHeight/cosAngle);
+        mDistance=mPhoneHeight/cosAngle;
 
         return   mDistance; // 스마트폰과 물체 사이의 거리
     }
@@ -47,32 +51,26 @@ public class MeasureHeight {
         return (degree + 720) % 360;
     }
 
-    public double getAngle(){
-        double inclination = Math.toDegrees(Math.acos(mZ));
-        double angle;
-        angle = Math.round((inclination) * 10.0) / 10.0;    // 지면과 스마트폰 사이의 각도
-        return angle;
-    }
 
     public double getHeight()
     {
         mHeightAngle = Math.toDegrees(Math.acos(mZ));
 
         if(mHeightAngle<90){   //예각일 경우
-//            Log.d("if","distanceAngle"+mDistanceAngle+"angle"+mHeightAngle);
+            Log.d("if","distanceAngle"+mDistanceAngle+"angle"+mHeightAngle);
             double deltaL = mPhoneHeight/Math.cos(Math.toRadians(mHeightAngle))
                     - mPhoneHeight/Math.cos(Math.toRadians(mDistanceAngle));
             double tanAngle = Math.tan(Math.toRadians(mHeightAngle));
 
-            mHeight=Math.round(deltaL/tanAngle);
+            mHeight=deltaL/tanAngle;
             return mHeight;  //물체의 높이
         }else{  //둔각일 경우
-//            Log.d("ELSE","distanceAngle"+mDistanceAngle+"angle"+mHeightAngle);
+            Log.d("ELSE","distanceAngle"+mDistanceAngle+"angle"+mHeightAngle);
             double tanAngle = Math.tan(Math.toRadians(mHeightAngle-90));
 
             double x= mPhoneHeight/Math.sin(Math.toRadians(mHeightAngle-90));
             this.mHeightAngle =mHeightAngle-mDistanceAngle;
-            mHeight= Math.round(tanAngle*(x+mDistance));
+            mHeight= tanAngle*(x+mDistance);
 
             return mHeight; //물체의 높이
         }

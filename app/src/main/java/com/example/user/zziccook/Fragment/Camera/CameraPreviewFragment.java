@@ -1,5 +1,6 @@
 package com.example.user.zziccook.Fragment.Camera;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,11 +10,15 @@ import android.support.v4.app.Fragment;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.user.zziccook.CameraPreview;
@@ -35,6 +40,8 @@ public class CameraPreviewFragment extends Fragment{
 
     private CameraPreview mPreview;
     private Camera mCamera;
+
+    public int Height;
 
     public static CameraPreviewFragment newInstance() {
         return new CameraPreviewFragment();
@@ -69,8 +76,23 @@ public class CameraPreviewFragment extends Fragment{
         // Create the Preview view and set it as the content of this Activity.
         mPreview = new CameraPreview(getActivity(), mCamera, cameraInfo, displayRotation);
 
+
         FrameLayout preview = (FrameLayout) root.findViewById(R.id.camera_preview);
+//
+//        DisplayMetrics metrics=new DisplayMetrics();
+//        WindowManager windowManager = (WindowManager)getActivity().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+//        windowManager.getDefaultDisplay().getMetrics(metrics);
+//
+//        RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams)preview.getLayoutParams();
+//        params.width=metrics.widthPixels;
+//        params.height=metrics.heightPixels;
+//        preview.setLayoutParams(params);
+
         preview.addView(mPreview);
+
+
+
+
 
         return root;
     }

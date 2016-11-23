@@ -18,8 +18,8 @@ public class Enums {
         BowlDetailsFragment,
         BowlAddFragment,
         BowlSelectListFragment,
-        SettingFragment,
-        BowlMeasureFragment
+        SettingFragment
+
     }
 
 

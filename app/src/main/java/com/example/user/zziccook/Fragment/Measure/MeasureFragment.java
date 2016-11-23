@@ -8,27 +8,33 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v13.app.FragmentCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.zziccook.CalculateMeasure;
 import com.example.user.zziccook.Data.DatabaseHelper;
 import com.example.user.zziccook.Fragment.Bowl.BowlListFragment;
 import com.example.user.zziccook.Fragment.Camera.CameraPreviewFragment;
-import com.example.user.zziccook.Fragment.Camera.OpenCVCameraFragment;
+
 import com.example.user.zziccook.Helpers.Constants;
 import com.example.user.zziccook.Helpers.Enums;
 import com.example.user.zziccook.Helpers.FileUtils;
+
 import com.example.user.zziccook.Model.Bowl;
 import com.example.user.zziccook.Model.Recipe;
 import com.example.user.zziccook.R;
@@ -58,7 +64,7 @@ public class MeasureFragment extends android.support.v4.app.Fragment
 
     private int mMeasuringValue; // 사용자로부터 입력받은 계량값
     private String mMeasuringUnit;// 사용자가 선택한 계량 단위
-   // OpenCVCameraFragment camera_preview_fragment; //카메라 프리뷰
+
     CameraPreviewFragment camera_preview_fragment; //카메라 프리뷰
 
 //    BowlListFragment bowlListFragment;
@@ -75,6 +81,15 @@ public class MeasureFragment extends android.support.v4.app.Fragment
     private TextView mRecipeOrderTextView;              //레시피 순서 들어가는곳.
     private TextView mRecipePreviewText;                //순서 미리보기
     private int mCurrentRecipeOrder;
+
+
+    //Bowl Image Properties
+    private ImageView mBowlImageView;
+
+
+    private CalculateMeasure calculateMeasure;
+
+
 
     //ImageProperties
     private String mCurrentImagePath = null;
@@ -100,6 +115,17 @@ public class MeasureFragment extends android.support.v4.app.Fragment
 
     private Bowl mBowl;
     private FrameLayout mBowlSelectFrameLayout;
+
+
+    FrameLayout frameLayout;
+    ImageView iv_down;
+    ImageView iv_top;
+    ImageView iv_user;
+
+
+
+
+
     public MeasureFragment() {
         // Required empty public constructor
     }
@@ -136,6 +162,10 @@ public class MeasureFragment extends android.support.v4.app.Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         initializeSimpleMeasureView(view);
         initializeRecipeMeasureView(view);
+        frameLayout = (FrameLayout) getActivity().findViewById(R.id.camera_fragment);
+         iv_down = (ImageView)getActivity().findViewById(R.id.lineDownView);
+         iv_top = (ImageView)getActivity().findViewById(R.id.lineTopView);
+         iv_user = (ImageView)getActivity().findViewById(R.id.lineUserView);
     }
 
     private void initializeSimpleMeasureView(final View view){
@@ -161,6 +191,9 @@ public class MeasureFragment extends android.support.v4.app.Fragment
 
         mBowlSelectFrameLayout = (FrameLayout) view.findViewById(R.id.select_bowl_fragment);
         mBowlSelectFrameLayout.setVisibility(View.GONE);
+
+        mBowlImageView = (ImageView) view.findViewById(R.id.BowlImage);
+//        mBowlImageView.setVisibility(View.GONE);
 
     }
     private void initializeRecipeMeasureView(final View view){
@@ -208,6 +241,8 @@ public class MeasureFragment extends android.support.v4.app.Fragment
         mAmountTextView = (TextView)mSlidingPanelLayout.findViewById(R.id.tv_Amount_atMeasure2);
 
 
+        calculateMeasure = new CalculateMeasure();
+
     }
 
 
@@ -221,12 +256,14 @@ public class MeasureFragment extends android.support.v4.app.Fragment
 
 
     private void showCameraPreview() {
-        //camera_preview_fragment = new OpenCVCameraFragment(); // 카메라 프래그먼트 생성 후 넣음.
+
         camera_preview_fragment = new CameraPreviewFragment(); // 카메라 프래그먼트 생성 후 넣음.
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.camera_fragment, camera_preview_fragment)
 //                .addToBackStack(null)
                 .commit();
+
+
     }
 
     public void releaseCameraPreview(){
@@ -236,6 +273,17 @@ public class MeasureFragment extends android.support.v4.app.Fragment
     public void startMeasure(View view){
         //Start Button 누르면 실행됨
           //startActivity(intent);
+
+        mBowlImageView.setVisibility(View.INVISIBLE);
+
+        iv_down.setVisibility(View.INVISIBLE);
+
+
+        iv_top.setVisibility(View.INVISIBLE);
+
+
+        iv_user.setVisibility(View.INVISIBLE);
+
         mMeasuringValue= Integer.parseInt(mMeasuringValueEditText.getText().toString());
         mMeasuringUnit = mMeasuringUnitSpinner.getSelectedItem().toString();
         mMeasureMode=Constants.SIMPLE_MEASURE;
@@ -258,18 +306,66 @@ public class MeasureFragment extends android.support.v4.app.Fragment
         mBowlSelectFrameLayout.setVisibility(View.GONE);
         /*화면에 뿌려주면됨*/
 
+        mCurrentImagePath = mBowl.getCannyImagePath();
+        if (mCurrentImagePath != null && !mCurrentImagePath.isEmpty()) {
+            mBowlImageView.setImageDrawable(new BitmapDrawable(getResources(),
+                    FileUtils.getResizedBitmap(mCurrentImagePath, 512, 512)));
+        } else {
+            mBowlImageView.setImageDrawable(mBowl.getImage(getActivity()));
+        }
+
+        mBowlImageView.setImageAlpha(100);
+
+        calculateMeasure.setMaxVol(mBowl.getVolume());
+        Log.d("calculate", "maxVol:"+String.valueOf(mBowl.getVolume()));
+
+        calculateMeasure.setRealHeight(mBowl.getEdgeLeftDown().y-mBowl.getEdgeLeftTop().y);
+        Log.d("calculate", "RealHeight:"+String.valueOf(mBowl.getEdgeLeftDown().y-mBowl.getEdgeLeftTop().y));
+
+        calculateMeasure.setUserValue(mMeasuringValue);
+        Log.d("calculate", "userValue:"+String.valueOf(mMeasuringValue));
+
+        calculateMeasure.calculateUserHeight();
+        double height = calculateMeasure.userHeight;
+        Log.d("calculate", "userHeight:"+String.valueOf(height));
 
 
 
 
 
 
+        float downline=(float)mBowl.getEdgeLeftDown().y/mBowl.getRowsLength()*mBowlImageView.getHeight();
+        float upline=(float)mBowl.getEdgeLeftTop().y/mBowl.getRowsLength()*mBowlImageView.getHeight();
+        float heightline= downline-(float)height/mBowl.getRowsLength()*mBowlImageView.getHeight();
+
+        iv_down.setTranslationY(downline);
+        iv_down.setVisibility(View.VISIBLE);
+
+        iv_top.setTranslationY(upline);
+        iv_top.setVisibility(View.VISIBLE);
+
+        iv_user.setTranslationY(heightline);
+        iv_user.setVisibility(View.VISIBLE);
+
+
+        Log.d(TAG,"Measure_DRAW LINE::mBowl "+String.valueOf(mBowl.getColsLength()));
+
+        Log.d(TAG,"Measure_DRAW LINE ::mBowl "+String.valueOf(mBowl.getRowsLength()));
 
 
 
+
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mBowlImageView.getLayoutParams();
+        FrameLayout.LayoutParams params1=(FrameLayout.LayoutParams) frameLayout.getLayoutParams();
+        params.width=params1.width;
+        params.height=params1.height;
+        mBowlImageView.setLayoutParams(params);
+        mBowlImageView.setVisibility(View.VISIBLE);
 
 
     }
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -289,6 +385,7 @@ public class MeasureFragment extends android.support.v4.app.Fragment
 
         showCameraPreview();
         changeViewByMeasureMode();
+//        Log.d(TAG,"CAMERA FRAME WIDTH+++++++++++++++++++++"+frameLayout.getLayoutParams().width+"Height+++++++++++++++++++++"+frameLayout.getLayoutParams().height);
     }
 
     private void GetPassedInRecipe(){

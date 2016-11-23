@@ -136,15 +136,15 @@ public class BowlDetailsFragment extends Fragment implements View.OnClickListene
         mNameTextView.setText(mBowl.getName());
         mTypeTextView.setText(mBowl.getType());
 
-        String edgeInfo =  "LEFT TOP: "          + mBowl.getEdgeLeftY().toString()
-                        +  "\nLEFT BOTTOM: "    + mBowl.getEdgeLeftX().toString()
-                        +  "\nRIGHT TOP: "      + mBowl.getEdgeRightY().toString()
-                        +  "\nRIGHT BOTTOM: "   + mBowl.getEdgeRightX().toString();
+        String edgeInfo =  "LEFT TOP: "          + mBowl.getEdgeLeftTop().toString()
+                        +  "\nLEFT BOTTOM: "    + mBowl.getEdgeLeftDown().toString()
+                        +  "\nRIGHT TOP: "      + mBowl.getEdgeRightTop().toString()
+                        +  "\nRIGHT BOTTOM: "   + mBowl.getEdgeRightDown().toString();
         mEdgeTextView.setText(edgeInfo);
 
-        mHeightTextView.setText(String.valueOf(mBowl.getHeight()));
-        mWidthTextView.setText(String.valueOf(mBowl.getWidth()));
-        mVolumeTextView.setText(String.valueOf(mBowl.getVolume()));
+        mHeightTextView.setText(String.valueOf(Math.round(mBowl.getHeight()*10.0)/10.0));
+        mWidthTextView.setText(String.valueOf(Math.round(mBowl.getWidth()*10.0)/10.0));
+        mVolumeTextView.setText(String.valueOf(Math.round(mBowl.getVolume()*10.0)/10.0));
 
 
         if (mCurrentImagePath != null && !mCurrentImagePath.isEmpty()) {

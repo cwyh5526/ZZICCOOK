@@ -2,18 +2,10 @@ package com.example.user.zziccook.Fragment.Bowl;
 
 
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,16 +21,12 @@ import android.widget.Toast;
 
 import com.example.user.zziccook.Data.DatabaseHelper;
 import com.example.user.zziccook.Helpers.Constants;
-import com.example.user.zziccook.Helpers.Enums;
 import com.example.user.zziccook.Helpers.FileUtils;
 import com.example.user.zziccook.Model.Bowl;
 import com.example.user.zziccook.R;
-import com.example.user.zziccook.TabLayoutActivity;
 import com.example.user.zziccook.VolumeMeasureActivity;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import org.opencv.core.Point;
 
 
 public class BowlAddFragment extends Fragment {
@@ -61,7 +49,7 @@ public class BowlAddFragment extends Fragment {
 
     private Spinner mBowlTypeSpinner;
 
-    private TextView mEdge;
+    private TextView mEdgeTextView;
 
     private Button  mAddNewBowlBtn, mSaveBtn, mCancelBtn;
 
@@ -69,10 +57,12 @@ public class BowlAddFragment extends Fragment {
     private ImageView mImageView;
 //    private Button mFavoriteBtn;
     private int mStar=0;
-    private double mPhoneHeight;
-
+    private double mPhoneHeight, mBowlHeight, mBowlWidth,mBowlVolume;
+    String mLeftTop,mLeftDown, mRightTop,  mRightDown;
     OnBowlSavedListener mCallback;
 
+    private int mRowsLen;
+    private int mColsLen;
 
     public BowlAddFragment() {
         // Required empty public constructor
@@ -139,6 +129,8 @@ public class BowlAddFragment extends Fragment {
         Log.d(TAG,"ON RESUME :: ");
         super.onResume();
         mBowl = new Bowl();
+        Log.d(TAG,"onResume:: mBowl "+mBowl.toString());
+
     }
 
 
@@ -152,7 +144,7 @@ public class BowlAddFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mBowlTypeSpinner.setAdapter(adapter);
 
-        mEdge=(TextView)mRootView.findViewById(R.id.tv_Bowl_Edge_Measured);
+        mEdgeTextView =(TextView)mRootView.findViewById(R.id.tv_Bowl_Edge_Measured);
         mImageView = (ImageView) mRootView.findViewById(R.id.imageView_Canny_Bowl);
         mAddNewBowlBtn = (Button) mRootView.findViewById(R.id.btn_Measure_Bowl);
         mAddNewBowlBtn.setOnClickListener(new View.OnClickListener(){
@@ -206,19 +198,27 @@ public class BowlAddFragment extends Fragment {
         mBowl.setType(mBowlTypeSpinner.getSelectedItem().toString());
 
         /*받아온 Edge 저장해줘야하는데... How?*/
+        Log.d(TAG,"SaveBowl::mBowl "+mBowl.toString());
 
-        mBowl.setEdgeLeftX("{1,1}");
-        mBowl.setEdgeLeftY("{2,2}");
-        mBowl.setEdgeRightX("{3,3}");
-        mBowl.setEdgeRightY("{4,4}");
+        mBowl.setColsLength(mColsLen);
+        mBowl.setRowsLength(mRowsLen);
+
+        Log.d(TAG,"SaveBowl::mBowl "+String.valueOf(mBowl.getColsLength()));
+
+        Log.d(TAG,"SaveBowl::mBowl "+String.valueOf(mBowl.getRowsLength()));
+
+        mBowl.setEdgeLeftTop(mLeftTop);
+        mBowl.setEdgeLeftDown(mLeftDown);
+        mBowl.setEdgeRightTop(mRightTop);
+        mBowl.setEdgeRightDown(mRightDown);
 
         if(!mHeightEditText.getText().toString().isEmpty()){
-            mBowl.setHeight(Double.parseDouble(mHeightEditText.getText().toString()));
+            mBowl.setHeight(mBowlHeight);
         }
         if(!mWidthEditText.getText().toString().isEmpty()){
-            mBowl.setWidth(Double.parseDouble(mWidthEditText.getText().toString()));
+            mBowl.setWidth(mBowlWidth);
         }if(!mVolumeEditText.getText().toString().isEmpty()){
-            mBowl.setVolume(Double.parseDouble(mVolumeEditText.getText().toString()));
+            mBowl.setVolume(mBowlVolume);
         }
 
         //Check to see if there is valid image path temporarily in memory
@@ -248,26 +248,80 @@ public class BowlAddFragment extends Fragment {
 
     }
 
-    public void SetMeasuredValues(Bundle extras,Uri uri,double bowlHeight, double bowlWidth,String leftX,String leftY,String rightX, String rightY){
+    public void SetMeasuredValues(Uri uri,double bowlHeight, double sobelAngle, String leftTop,String leftDown,String rightTop, String rightDown, int rowsLen, int colsLen){
 
-        if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
-            mImageView.setImageBitmap(photo);
+
+        if (uri != null) {
+            mCurrentImagePath = FileUtils.getPath(getActivity(), uri);
+            Log.d(TAG,"SetMeasuredValues:: uri::"+uri);
+
+            Log.d(TAG,"SetMeasuredValues:: mCurrentImagePath::"+mCurrentImagePath);
+            // Update Bowl's picture
+            if (mCurrentImagePath != null && !mCurrentImagePath.isEmpty()) {
+                mImageView.setImageDrawable(new BitmapDrawable(getResources(),
+                        FileUtils.getResizedBitmap(mCurrentImagePath, 512, 512)));
+//                mImageView.setVisibility(View.VISIBLE);
+            }
         }
-        mBowl.setHeight(bowlHeight);
-        mHeightEditText.setText(String.valueOf(bowlHeight));
+        mRowsLen=rowsLen;
+        mColsLen=colsLen;
 
-        mBowl.setWidth(bowlWidth);
-        mWidthEditText.setText(String.valueOf(bowlWidth));
+        mBowlHeight=bowlHeight;
+        mBowl.setHeight(mBowlHeight);
+        mHeightEditText.setText(String.valueOf(mBowlHeight));
+        mLeftTop=leftTop;
+        mLeftDown=leftDown;
+        mRightTop=rightTop;
+        mRightDown=rightDown;
 
-        mBowl.setEdgeLeftX(leftX);
-        mBowl.setEdgeLeftY(leftY);
-        mBowl.setEdgeRightX(rightX);
-        mBowl.setEdgeRightY(rightY);
-        mEdge.setText(mBowl.getEdgeLeftX()+" "+mBowl.getEdgeLeftY()+" "+ mBowl.getEdgeRightX()+" "+ mBowl.getEdgeRightY());
+        mBowl.setEdgeLeftTop(leftTop);
+        mBowl.setEdgeLeftDown(leftDown);
+        mBowl.setEdgeRightTop(rightTop);
+        mBowl.setEdgeRightDown(rightDown);
+        mEdgeTextView.setText(mBowl.getEdgeLeftTop()+" "+mBowl.getEdgeLeftDown()+" "+ mBowl.getEdgeRightTop()+" "+ mBowl.getEdgeRightDown());
+        Log.d(TAG,"EdgSetMeasuredValuese::mBowl "+mBowl.toString());
+
+        Log.d(TAG,"SetMeasuredValues:: Edge"+mBowl.getEdgeLeftTop());
+        Log.d(TAG,"ESetMeasuredValuesdge:: Edge"+mBowl.getEdgeLeftDown());
+        Log.d(TAG,"ESetMeasuredValuesdge::Edge "+mBowl.getEdgeRightTop());
+        Log.d(TAG,"ESetMeasuredValuesdge:: Edge"+mBowl.getEdgeRightDown());
+        mBowlWidth=calculateWidth(sobelAngle);
+
+        mBowl.setWidth(mBowlWidth);
+        mWidthEditText.setText(String.valueOf(Math.round(mBowlWidth*10.0)/10.0));
+
+        mBowlVolume=calculateVolume();
+        mVolumeEditText.setText(String.valueOf(Math.round(mBowlVolume)*10.0/10.0));
 
     }
+    private double calculateWidth(double sobelAngle){
+        Log.d(TAG,"Calculate Real Width"+String.valueOf(sobelAngle));
+        //화면상의 그릇 너비 및 높이
+        double widthOnScreen,heightOnScreen,heightNormalized,widthNormalized;
 
+        heightOnScreen= mBowl.getEdgeLeftDown().y- mBowl.getEdgeLeftTop().y;
+//        widthOnScreen= ((edge[2].x-edge[0].x)+(edge[3].x-edge[1].x))/2; //위아래 평균
+        widthOnScreen =(mBowl.getEdgeRightDown().x- mBowl.getEdgeLeftDown().x);//아래 너비 값
+
+        heightNormalized = heightOnScreen/Math.sin(Math.toRadians(sobelAngle));
+
+        widthNormalized= widthOnScreen -(mBowl.getEdgeLeftDown().x-mBowl.getEdgeLeftTop().x);
+
+        return Math.round((mBowlHeight*widthNormalized)/heightNormalized*10.0)/10.0;
+    }
+
+    private double calculateVolume(){
+        double volume=0.0;
+
+        if(mBowlTypeSpinner.getSelectedItem().toString().equals("cylinder")){
+            volume= Math.PI*Math.pow((mBowlWidth/2),2)*mBowlHeight;
+        }else if(mBowlTypeSpinner.getSelectedItem().toString().equals("cup")){
+
+        }else{
+            Toast.makeText(getContext(),"Select Type of Bowl",Toast.LENGTH_SHORT);
+        }
+        return Math.round(volume*10.0)/10.0;
+    }
 
     @Override
     public void onDetach() {

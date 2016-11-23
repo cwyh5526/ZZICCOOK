@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Point;
 import android.util.Log;
 
 import com.example.user.zziccook.Helpers.Constants;
@@ -67,6 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + Constants.COLUMN_BOWL_ID + " INTEGER PRIMARY KEY, "
             + Constants.COLUMN_BOWL_NAME + " TEXT, "
             + Constants.COLUMN_BOWL_TYPE +" TEXT, "
+            + Constants.COLUMN_BOWL_ROWS +" INTEGER, "
+            + Constants.COLUMN_BOWL_COLS +" INTEGER, "
             + Constants.COLUMN_BOWL_EDGE_LEFT_X + " TEXT, "
             + Constants.COLUMN_BOWL_EDGE_LEFT_Y + " TEXT, "
             + Constants.COLUMN_BOWL_EDGE_RIGHT_X + " TEXT, "
@@ -200,10 +201,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         bowl.setName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_NAME)));
         bowl.setType(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_TYPE)));
 
-        bowl.setEdgeLeftX(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_LEFT_X)));
-        bowl.setEdgeLeftY(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_LEFT_Y)));
-        bowl.setEdgeRightX(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_RIGHT_X)));
-        bowl.setEdgeRightY(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_RIGHT_Y)));
+        bowl.setRowsLength(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_BOWL_ROWS)));
+        bowl.setColsLength(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_BOWL_COLS)));
+
+        bowl.setEdgeLeftTop(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_LEFT_X)));
+        bowl.setEdgeLeftDown(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_LEFT_Y)));
+        bowl.setEdgeRightTop(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_RIGHT_X)));
+        bowl.setEdgeRightDown(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_BOWL_EDGE_RIGHT_Y)));
 
         bowl.setHeight(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_BOWL_HEIGHT)));
         bowl.setWidth(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_BOWL_WIDTH)));
@@ -262,10 +266,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values.put(Constants.COLUMN_BOWL_NAME, bowl.getName());
                 values.put(Constants.COLUMN_BOWL_TYPE, bowl.getType());
 
-                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_X, bowl.getEdgeLeftX().toString());
-                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_Y, bowl.getEdgeLeftY().toString());
-                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_X, bowl.getEdgeRightX().toString());
-                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_Y, bowl.getEdgeRightY().toString());
+                values.put(Constants.COLUMN_BOWL_ROWS, bowl.getRowsLength());
+                values.put(Constants.COLUMN_BOWL_COLS, bowl.getColsLength());
+
+                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_X, bowl.getEdgeLeftTop().toString());
+                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_Y, bowl.getEdgeLeftDown().toString());
+                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_X, bowl.getEdgeRightTop().toString());
+                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_Y, bowl.getEdgeRightDown().toString());
 
                 values.put(Constants.COLUMN_BOWL_HEIGHT, bowl.getHeight());
                 values.put(Constants.COLUMN_BOWL_WIDTH, bowl.getWidth());
@@ -410,10 +417,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values.put(Constants.COLUMN_BOWL_NAME, bowl.getName());
                 values.put(Constants.COLUMN_BOWL_TYPE, bowl.getType());
 
-                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_X, bowl.getEdgeLeftX().toString());
-                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_Y, bowl.getEdgeLeftY().toString());
-                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_X, bowl.getEdgeRightX().toString());
-                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_Y, bowl.getEdgeRightY().toString());
+                values.put(Constants.COLUMN_BOWL_ROWS, bowl.getRowsLength());
+                values.put(Constants.COLUMN_BOWL_COLS, bowl.getColsLength());
+
+                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_X, bowl.getEdgeLeftTop().toString());
+                values.put(Constants.COLUMN_BOWL_EDGE_LEFT_Y, bowl.getEdgeLeftDown().toString());
+                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_X, bowl.getEdgeRightTop().toString());
+                values.put(Constants.COLUMN_BOWL_EDGE_RIGHT_Y, bowl.getEdgeRightDown().toString());
 
                 values.put(Constants.COLUMN_BOWL_HEIGHT, bowl.getHeight());
                 values.put(Constants.COLUMN_BOWL_WIDTH, bowl.getWidth());
@@ -434,4 +444,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 }
+
 
